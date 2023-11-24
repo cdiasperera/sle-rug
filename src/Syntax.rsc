@@ -34,7 +34,7 @@ syntax Expr
 
 syntax Type = "integer" | "boolean" | "string";
 
-lexical Str = "\"" [\ !\a23-\a7f]* "\"";
+lexical Str = "\"" ([\ !\a23-\a7f] | "\\\"")* "\"";
 
 lexical Int = [0-9]+;
 
