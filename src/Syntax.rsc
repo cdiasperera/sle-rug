@@ -10,24 +10,32 @@ extend lang::std::Id;
 start syntax Form 
   = "form" Id name "{" Question* questions "}"; 
 
-// TODO: question, computed question, block, if-then-else, if-then
-syntax Question = ;
-
-// TODO: +, -, *, /, &&, ||, !, >, <, <=, >=, ==, !=, literals (bool, int, str)
-// Think about disambiguation using priorities and associativity
-// and use C/Java style precedence rules (look it up on the internet)
-syntax Expr 
-  = Id \ "true" \ "false" // true/false are reserved keywords.
+syntax Question 
+  = Str question Id variable ":" Type type ("=" Expr value)?
+  | "if" "(" Expr value ")" Block block ("else" Block block)?
   ;
-  
-syntax Type = ;
 
-lexical Str = ;
+syntax Block
+  = "{" Question* questions "}"
+  ;
 
-lexical Int 
-  = ;
+// Following C style precedene
+syntax Expr 
+  = "(" Expr e ")"
+  | Id \ "true" \ "false" // true/false are reserved keywords.
+  > Bool bool | Int int | Str str
+  > "!" Expr e | "-" Expr e
+  > left ( Expr e1 "*" Expr e2 | Expr e1 "/" Expr e2 )
+  > left ( Expr e1 "-" Expr e2 | Expr e1 "+" Expr e2 )
+  > left (Expr e1 "\<" Expr e2 | Expr e1 "\>" Expr e2 | Expr e1 "\<=" Expr e2 | Expr e1 "\>=" Expr e2 )
+  > left ( Expr e1 "==" Expr e2 | Expr e1 "!=" Expr e2 )
+  > left ( Expr e1 "&&" Expr e2 | Expr e1 "||" Expr e2 )
+  ;
 
-lexical Bool = ;
+syntax Type = "integer" | "boolean" | "string";
 
+lexical Str = "\"" [\ !\a23-\a7f]* "\"";
 
+lexical Int = [0-9]+;
 
+lexical Bool = "true" | "false";
