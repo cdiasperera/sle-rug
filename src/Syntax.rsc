@@ -11,8 +11,10 @@ start syntax Form
   = "form" Id name "{" Question* questions "}"; 
 
 syntax Question 
-  = Str question Id variable ":" Type type ("=" Expr value)?
-  | "if" "(" Expr value ")" Block block ("else" Block block)?
+  = Str label Id variable ":" Type type 
+  | Str label Id variable ":" Type type "=" Expr value
+  | "if" "(" Expr value ")" Block block 
+  | "if" "(" Expr value ")" Block block "else" Block block
   ;
 
 syntax Block
