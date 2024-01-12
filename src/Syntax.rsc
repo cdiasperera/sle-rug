@@ -22,7 +22,7 @@ syntax Block
   ;
 
 // Following C style precedene
-syntax Expr 
+syntax Expr
   = "(" Expr e ")"
   | Id \ "true" \ "false" // true/false are reserved keywords.
   > Bool bool | Int int | Str str

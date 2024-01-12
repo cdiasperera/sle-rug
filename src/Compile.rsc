@@ -21,14 +21,18 @@ import lang::html::IO;
  */
 
 void compile(AForm f) {
-  writeFile(f.src[extension="js"].top, form2js(f));
-  writeFile(f.src[extension="html"].top, writeHTMLString(form2html(f)));
+  compile(f, f.src[extension="js"].top, f.src[extension="html"].top);
 }
 
-HTMLElement form2html(AForm f) {
+void compile(AForm f, loc outJS, loc outHTML) {
+  writeFile(outJS, form2js(f));
+  writeFile(outHTML, writeHTMLString(form2html(f, outJS)));
+}
+
+HTMLElement form2html(AForm f, loc jsLOC) {
   return html([
     head([
-      script([],\type="text/javascript", \src="<f.src[extension="js"].file>")
+      script([],\type="text/javascript", \src="<jsLOC.file>")
     ]),
     body([
       h1([text("Form: " + "<f.src[extension=""].file>")]),
